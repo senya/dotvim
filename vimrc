@@ -86,6 +86,9 @@ autocmd BufRead,BufNewFile */qemu/*.c set tw=80
 autocmd BufRead,BufNewFile */git-rebase-todo set nospell
 autocmd BufRead,BufNewFile *.json set comments=:#
 
+":help last-position-jump
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
 au FilterWritePre * if &diff | set colorcolumn= | endif
 
 set wildmenu "visual command autocomplete
