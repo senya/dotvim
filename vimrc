@@ -85,6 +85,7 @@ autocmd BufRead,BufNewFile */vzkernel/* set noexpandtab
 autocmd BufRead,BufNewFile */qemu/*.c set tw=80
 autocmd BufRead,BufNewFile */git-rebase-todo set nospell
 autocmd BufRead,BufNewFile *.json set comments=:#
+"autocmd BufRead,BufNewFile *.json syntax spell toplevel
 
 au FilterWritePre * if &diff | set colorcolumn= | endif
 
