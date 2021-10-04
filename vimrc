@@ -21,7 +21,7 @@ Plugin 'xolox/vim-notes'
 Plugin 'wikitopian/hardmode'
 Plugin 'tpope/vim-fugitive'
 Plugin 'Conque-Shell'
-Plugin 'airblade/vim-gitgutter'
+" Plugin 'airblade/vim-gitgutter'
 Plugin 'rking/ag.vim'
 Plugin 'vimwiki/vimwiki'
 " Plugin 'vim-scripts/ConflictMotions'
@@ -49,8 +49,48 @@ Plugin 'vim-scripts/VimRegEx.vim'
 
 Plugin 'vim-scripts/functionlist.vim'
 
+"Plugin 'python-mode/python-mode'
+Plugin 'Vimjas/vim-python-pep8-indent'
+Plugin 'dense-analysis/ale'
+
+Plugin 'vim-python/python-syntax'
+
+Plugin 'wellle/context.vim'
+
+Plugin 'inkarkat/vim-ingo-library'
+Plugin 'inkarkat/vim-mark'
+
 call vundle#end()
 """" END VUNDLE
+
+" for plugin 'vim-python/python-syntax'
+let g:python_highlight_all = 1
+
+" for plugin 'python-mode/python-mode', to not interfere with
+" plugin 'vim-python/python-syntax'
+let g:pymode_syntax_all = 0
+let g:pymode_syntax = 0
+let g:pymode_options = 0
+" to not interfere with plugin 'dense-analysis/ale'
+let g:pymode_lint_on_write = 0
+
+" for plugin 'dense-analysis/ale
+"let g:ale_linters = {'python': ['pycodestyle']} 
+let g:ale_linters = {'c': ['mymake'], 'cpp': ['mymake']} 
+let g:ale_c_cc_options="-Ibuild -I. -Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+let g:ale_cpp_cc_options="-Ibuild -I. -Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+let g:ale_c_clang_options="-Ibuild -I. -Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+let g:ale_cpp_clang_options="-Ibuild -I. -Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+let g:ale_cpp_flawfinder_options="-Ibuild -Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+let g:ale_c_clangcheck_options="-Ibuild -extra-arg='-Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include'"
+let g:ale_cpp_clangcheck_options="-Ibuild -Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+let g:ale_c_gcc_options="-Ibuild -I. -Iinclude -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include"
+
+let g:ale_python_mypy_options="--warn-unused-configs  --disallow-subclassing-any --disallow-any-generics --disallow-incomplete-defs --disallow-untyped-decorators --no-implicit-optional  --warn-redundant-casts --warn-unused-ignores --no-implicit-reexport"
+
+" for plugin 'vim-mark' to not rewrite * and # search:
+nmap <Plug>IgnoreMarkSearchNext <Plug>MarkSearchNext
+nmap <Plug>IgnoreMarkSearchPrev <Plug>MarkSearchPrev
 
 :set diffopt+=vertical
 :let g:notes_directories = ['~/notes']
@@ -82,10 +122,16 @@ autocmd BufRead,BufNewFile */Sources/* set noexpandtab
 autocmd BufRead,BufNewFile */ploop/* set noexpandtab
 autocmd BufRead,BufNewFile */newploop/* set noexpandtab
 autocmd BufRead,BufNewFile */vzkernel/* set noexpandtab
-autocmd BufRead,BufNewFile */qemu/*.c set tw=80
+autocmd BufRead,BufNewFile *.h,*.c set tw=80
+autocmd BufRead,BufNewFile *.py set tw=79
+autocmd BufRead,BufNewFile */qemu-iotests/??? set tw=79
 autocmd BufRead,BufNewFile */git-rebase-todo set nospell
 autocmd BufRead,BufNewFile *.json set comments=:#
 "autocmd BufRead,BufNewFile *.json syntax spell toplevel
+
+autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+
+au BufRead,BufNewFile */COMMIT_EDITMSG set nocindent | set tw=71 | set fo+=t
 
 au FilterWritePre * if &diff | set colorcolumn= | endif
 
@@ -120,10 +166,13 @@ nnoremap <leader><space>  :nohlsearch<CR>
 
 nnoremap <cr> :noh<CR><CR>:<backspace>
 
-inoremap <f6> <esc>:wall<enter>:make -j9<enter>
-noremap <f6> <esc>:wall<enter>:make -j9<enter>
+inoremap <f6> <esc>:wall<enter>:make -j9 qemu-system-x86_64<enter>
+noremap <f6> <esc>:wall<enter>:make -j9 qemu-system-x86_64<enter>
 
 noremap <f2> <esc>:Flisttoggle<enter>
+
+let g:context_enabled = 0
+nnoremap <f12> :ContextToggle<CR>
 
 set nocscopetag
 "let g:airline_theme = 'kolor'
@@ -145,6 +194,10 @@ endfunction
 "nnoremap <F2> V:Autoformat<CR>
 
 hi MatchParen cterm=bold ctermbg=none ctermfg=white
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
 
 " airline config
 let g:airline#extensions#default#section_truncate_width = {
