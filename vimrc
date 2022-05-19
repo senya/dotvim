@@ -21,13 +21,15 @@ Plugin 'xolox/vim-notes'
 Plugin 'wikitopian/hardmode'
 Plugin 'tpope/vim-fugitive'
 Plugin 'Conque-Shell'
-Plugin 'airblade/vim-gitgutter'
+"Plugin 'airblade/vim-gitgutter'
 Plugin 'rking/ag.vim'
 Plugin 'vimwiki/vimwiki'
 " Plugin 'vim-scripts/ConflictMotions'
 
 Plugin 'tomasr/molokai'
-Plugin 'altercation/vim-colors-solarized'
+Plugin 'morhetz/gruvbox'
+"Plugin 'NLKNguyen/papercolor-theme'
+"Plugin 'altercation/vim-colors-solarized'
 
 Plugin 'majutsushi/tagbar'
 Plugin 'bling/vim-airline'
@@ -140,7 +142,7 @@ set wildmode=longest,list,full
 
 let g:markdown_fenced_languages = ['c', 'cpp', 'sh', 'javascript', 'js=javascript', 'python', 'ruby']
 
-highligh Comment ctermfg=darkgray
+"highligh Comment ctermfg=darkgray
 "let g:molokai_original = 1
 let g:rehash256 = 1
 colorscheme molokai
@@ -162,12 +164,16 @@ let mapleader = ","
 nnoremap j gj
 nnoremap k gk
 nnoremap <leader><space>  :nohlsearch<CR>
-"nnoremap * :keepjumps normal *``
+"nnoremap * :keepjumps normal! *``<CR>
+"nnoremap * :keepjumps normal! mi*`i<CR>
+"nnoremap * m`:keepjumps normal! *``<cr>
+"nmap <silent> * "syiw<Esc>: let @/ = @s<CR>
+nnoremap <silent> * :let @/= '\<' . expand('<cword>') . '\>' <bar> set hls <cr>
 
 nnoremap <cr> :noh<CR><CR>:<backspace>
 
-inoremap <f6> <esc>:wall<enter>:make -j9 qemu-system-x86_64<enter>
-noremap <f6> <esc>:wall<enter>:make -j9 qemu-system-x86_64<enter>
+inoremap <f6> <esc>:wall<enter>:make -j12<enter>
+noremap <f6> <esc>:wall<enter>:make -j12<enter>
 
 noremap <f2> <esc>:Flisttoggle<enter>
 
@@ -193,6 +199,7 @@ endfunction
 "vnoremap <F2> :Autoformat<CR>
 "nnoremap <F2> V:Autoformat<CR>
 
+
 hi MatchParen cterm=bold ctermbg=none ctermfg=white
 
 if has("autocmd")
@@ -209,3 +216,12 @@ let g:airline#extensions#default#section_truncate_width = {
     \ 'warning': 80,
     \ 'error': 80,
     \ }
+
+
+" Modify colors of DIFF
+"set termguicolors
+"hi DiffAdd      guifg=NONE          guibg=#162116
+"hi DiffChange   guifg=NONE          guibg=#162116
+"hi DiffDelete   guifg=#ff8080       guibg=#101010
+"hi DiffText     guifg=NONE          guibg=#2c8e2e
+hi DiffAdd ctermbg=232
